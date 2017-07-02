@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const faceReq = require('./app/faceReqHandler.js');
+const faceReq = require('./app/face_handler.js');
 
 const app = express();
 
