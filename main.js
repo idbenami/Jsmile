@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const faceAnalyze = require('./app/picture_analyzer.js');
 const faceReq = require('./app/face_handler.js');
-
+var answer = "";
 const app = express();
 const fileUpload = require('express-fileupload');
 
@@ -20,6 +20,7 @@ app.post('/photo', function(req, res) {
     // If there isn't an error
     if (desc && !err) {
       res.json(desc);
+      answer = desc;
     } else {
       console.log(err);
       res.status(400);
@@ -28,7 +29,9 @@ app.post('/photo', function(req, res) {
 
 });
 
-
+app.get('/answer', function(req, res) {
+  res.send(answer);
+})
 
 app.listen(3000, function () {
     console.log('App listening on port 3000!')
