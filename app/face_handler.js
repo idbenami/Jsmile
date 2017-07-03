@@ -28,7 +28,9 @@ module.exports.faceDetect = function(imageName, callback) {
             if (!error && response.statusCode == 200) {
                 // Print out the response body
                 console.log('recieved data');
-                callback({numbers: { man:getAmountOfMen(body), weman:getAmountOfWomen(body) }, 
+                callback({numbers: { sum:getNumOfPeople(body), 
+                                     men:getAmountOfMen(body), 
+                                     women:getAmountOfWomen(body) }, 
                           commonEmotion: getCommonEmotion(body)});
             }
         });
