@@ -17,7 +17,7 @@ app.post('/photo', function(req, res) {
 })
 
 app.get('/face', function (req, res) {
-    faceReq.faceDetect('idanPhoto.jpg', function(responseBody){
+    faceReq.faceDetect('oferStupid.jpg', function(responseBody){
         res.send(responseBody);
     });
 });
