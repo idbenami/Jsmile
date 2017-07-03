@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const faceAnalyze = require('./app/picture_analyzer.js');
 const faceReq = require('./app/face_handler.js');
 
 const app = express();
@@ -14,12 +15,15 @@ app.get('/', function (req, res) {
 
 app.post('/photo', function(req, res) {
   console.log("recieved a photo");
-})
-
-app.get('/face', function (req, res) {
-    faceReq.faceDetect('idanPhoto.jpg', function(responseBody){
-        res.send(responseBody);
-    });
+  faceAnalyze.analyze(req.files.file, function(desc, err) {
+    // If there isn't an error
+    if (desc && !err) {
+      res.json(desc);
+    } else {
+      console.log(err);
+      res.status(400);
+    }
+  });
 });
 
 
