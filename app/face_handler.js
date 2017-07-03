@@ -28,10 +28,11 @@ module.exports.faceDetect = function(imageName, callback) {
             if (!error && response.statusCode == 200) {
                 // Print out the response body
                 console.log('recieved data');
-                callback({numbers: { sum:getNumOfPeople(body), 
-                                     men:getAmountOfMen(body), 
-                                     women:getAmountOfWomen(body) }, 
-                          commonEmotion: getCommonEmotion(body)});
+                var faces = JSON.parse(body);
+                callback({numbers: { sum:getNumOfPeople(faces), 
+                                     men:getAmountOfMen(faces), 
+                                     women:getAmountOfWomen(faces) }, 
+                          commonEmotion: getCommonEmotion(faces)});
             }
         });
     });
@@ -69,7 +70,7 @@ function getAmountOfMen(json) {
     var curr;
 
     for (var i = 0; i < faces.length; i++) {
-            curr = faces[i].gender.value;
+            curr = faces[i].attributes.gender.value;
 
         if (curr == "Male") {
             nNumOfMen++;
@@ -85,7 +86,7 @@ function getAmountOfWomen(json) {
     var curr;
 
     for (var i = 0; i < faces.length; i++) {
-            curr = faces[i].gender.value;
+            curr = faces[i].attributes.gender.value;
 
         if (curr == "Female") {
             nNumOfWomen++;
@@ -123,16 +124,17 @@ function getCommonEmotion(json) {
                         "happiness": 0.00} ;
 
     for (var i =0; i < faces.length; i++) {
-        for (var emotion in faces[i].attributes.emotions) {
-            emotionAvg[emotion] += emotion;
+        for (var emotion in faces[i].attributes.emotion) {
+            emotionsAvg[emotion] += faces[i].attributes.emotion[emotion];
         }
     }
 
     var maxValue = -999;
     var maxEmotion = null;
-    for (var emotion in faces[i].attributes.emotions) {
-            if(emotionAvg[emotion] > maxValue) {
-                maxValue = emotionAvg[emotion];
+    for (var emotion in emotionsAvg) {
+        
+            if(emotionsAvg[emotion] > maxValue) {
+                maxValue = emotionsAvg[emotion];
                 maxEmotion = emotion;
             }
     }
