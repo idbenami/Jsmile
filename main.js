@@ -15,6 +15,7 @@ app.get('/', function (req, res) {
 
 app.post('/photo', function(req, res) {
   console.log("recieved a photo");
+
   faceAnalyze.analyze(req.files.file, function(desc, err) {
     // If there isn't an error
     if (desc && !err) {
@@ -24,7 +25,9 @@ app.post('/photo', function(req, res) {
       res.status(400);
     }
   });
+
 });
+
 
 
 app.listen(3000, function () {

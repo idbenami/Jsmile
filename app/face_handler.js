@@ -11,10 +11,11 @@ var options = {
             api_secret: 'LYV0oGe-SBy1fGQaxRhY_WpdE4dLRMRP', 
             return_attributes: 'gender,age,smiling,glass,headpose,blur,eyestatus,emotion,facequality,ethnicity',
             image_base64: ''}
-}
+};
 
 // Start the request
 module.exports.faceDetect = function(imageName, callback) {
+
     fs.readFile(path.join(__dirname, 'pictures', imageName), function(err, data) {
         if (err) throw err;
 
@@ -27,7 +28,10 @@ module.exports.faceDetect = function(imageName, callback) {
             if (!error && response.statusCode == 200) {
                 // Print out the response body
                 console.log('recieved data');
-                callback(body);
+                callback({numbers: { sum:getNumOfPeople(body), 
+                                     men:getAmountOfMen(body), 
+                                     women:getAmountOfWomen(body) }, 
+                          commonEmotion: getCommonEmotion(body)});
             }
         });
     });
@@ -110,17 +114,17 @@ function getAverage(json) {
 
 function getCommonEmotion(json) {
     var faces = getFacesArray(json);
-    var emotionsAvg = {"sadness": 0.00,
+    var emotionsAvg = { "sadness": 0.00,
                         "neutral": 0.00,
                         "disgust": 0.00,
                         "anger": 0.00,
                         "surprise": 0.00,
                         "fear": 0.00,
-                        "happiness": 0.00};
+                        "happiness": 0.00} ;
 
     for (var i =0; i < faces.length; i++) {
         for (var emotion in faces[i].attributes.emotions) {
-            emotionAvg[emotion]++;
+            emotionAvg[emotion] += emotion;
         }
     }
 
